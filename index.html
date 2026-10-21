@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f8eaf0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Ruleta Lectora">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Mi Ruleta Lectora</title>
+<style>
+:root{--pink:#e7a9c1;--rose:#b65f83;--plum:#67465d;--cream:#fffaf7;--lilac:#e9e1f5;--mint:#dceee5;--ink:#44313e;--muted:#876f7d;--line:#ead8e1}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(155deg,#fff8f6 0%,#f8edf5 52%,#f1edf9 100%);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+header{padding:24px 18px 16px;text-align:center}.eyebrow{letter-spacing:.15em;text-transform:uppercase;font-size:.68rem;color:var(--rose);font-weight:800}h1{font-family:Georgia,serif;font-weight:600;font-size:clamp(2rem,8vw,3rem);line-height:1.04;margin:8px 0;color:var(--plum)}header p{margin:8px auto 0;max-width:420px;color:var(--muted);font-size:.94rem}
+main{width:min(760px,100%);margin:auto;padding:0 14px 40px}.panel{background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:22px;padding:17px;margin:12px 0;box-shadow:0 8px 24px rgba(103,70,93,.06)}
+h2{font-family:Georgia,serif;font-size:1.35rem;margin:0 0 12px;color:var(--plum)}label{display:block;font-size:.82rem;font-weight:750;color:var(--muted);margin:0 0 6px}select,input[type=file],button,.secondary{font:inherit}select{width:100%;border:1px solid var(--line);background:#fffafc;border-radius:12px;padding:12px;color:var(--ink);margin-bottom:12px}
+button{border:0;border-radius:999px;padding:12px 16px;font-weight:750;cursor:pointer;transition:transform .15s,opacity .15s}button:active{transform:scale(.98)}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:var(--rose);color:white;box-shadow:0 5px 14px #b65f8330}.secondary{background:#f5e8ef;color:var(--plum);border:1px solid var(--line)}.danger{background:#fff0f2;color:#974b64;border:1px solid #f0d0da}.button-row{display:flex;gap:8px;flex-wrap:wrap}.button-row button{flex:1;min-width:130px}
+.wheel-wrap{position:relative;width:min(340px,85vw);margin:0 auto 12px}.wheel-wrap canvas{display:block;width:100%;height:auto;filter:drop-shadow(0 7px 10px #67465d18)}.pointer{position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:15px solid transparent;border-right:15px solid transparent;border-top:29px solid #67465d;z-index:2}.wheel-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:var(--cream);border:4px solid white;width:70px;height:70px;display:grid;place-items:center;color:var(--rose);font-size:1.7rem;box-shadow:0 2px 8px #67465d22;pointer-events:none}
+.small-note{font-size:.82rem;color:var(--muted);text-align:center;line-height:1.45}.result{background:linear-gradient(135deg,#fff5f8,#f4effb);border:1px dashed #d7a3ba;border-radius:16px;padding:15px;text-align:center;margin-top:12px;display:none}.result .book-title{font-family:Georgia,serif;font-size:1.45rem;color:var(--plum);font-weight:700}.result .book-author{color:var(--muted);margin-top:5px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.stat{background:#fff7fa;border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center}.stat strong{display:block;font-size:1.35rem;color:var(--rose)}.stat span{font-size:.72rem;color:var(--muted)}
+.book-list{display:grid;gap:9px}.book{border:1px solid var(--line);background:#fffafd;border-radius:15px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.book-title-small{font-family:Georgia,serif;font-weight:700;color:var(--plum);font-size:1rem}.book-meta{font-size:.8rem;color:var(--muted);margin-top:3px}.book-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}.book-actions select{width:auto;max-width:135px;margin:0;padding:8px;font-size:.78rem}.pill{display:inline-block;border-radius:99px;padding:4px 8px;font-size:.7rem;background:#f3e7f0;color:var(--plum);margin-top:6px}
+.empty{text-align:center;padding:20px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.import-label{display:inline-flex;align-items:center;justify-content:center}.file-input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}.foot{text-align:center;color:var(--muted);font-size:.76rem;padding:12px 16px 30px}
+@media(min-width:650px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}.two-col .panel{margin:0}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">✦ Tu próxima historia ✦</div><h1>Mi Ruleta<br>Lectora</h1><p>Una pequeña dosis de magia para decidir qué leer después. ♡</p></header>
+<main>
+<section class="panel">
+<h2>🎀 Elige tu universo</h2>
+<label for="category">Categoría</label><select id="category"><option value="__all">Todas las categorías</option></select>
+<label for="statusFilter">Estado de lectura</label><select id="statusFilter"><option value="Pendiente">Solo pendientes</option><option value="__all">Todos los estados</option><option value="Leyendo">Leyendo</option><option value="Leído">Leídos</option><option value="Pausado">Pausados</option></select>
+<div class="stats"><div class="stat"><strong id="eligibleCount">0</strong><span>en la ruleta</span></div><div class="stat"><strong id="pickedCount">0</strong><span>ya elegidos</span></div><div class="stat"><strong id="totalCount">0</strong><span>en biblioteca</span></div></div>
+<div class="wheel-wrap"><div class="pointer"></div><canvas id="wheel" width="700" height="700" aria-label="Ruleta de libros"></canvas><div class="wheel-center">♡</div></div>
+<button id="spin" class="primary" style="display:block;width:100%;font-size:1.05rem">✨ Girar la ruleta</button>
+<p id="wheelNote" class="small-note">Importa tu CSV para llenar la ruleta de historias.</p>
+<div id="result" class="result" aria-live="polite"><div class="eyebrow">Tu próxima lectura</div><div id="resultTitle" class="book-title"></div><div id="resultAuthor" class="book-author"></div><div id="resultCategory" class="pill"></div><div class="button-row" style="margin-top:13px"><button id="markReading" class="secondary">Empezar a leer</button><button id="another" class="secondary">Otra vez</button></div></div>
+<div class="button-row" style="margin-top:14px"><button id="resetPicked" class="secondary">Reiniciar libros elegidos</button></div>
+</section>
+<div class="two-col">
+<section class="panel">
+<h2>📚 Tu biblioteca</h2>
+<p class="small-note" style="text-align:left">Importa un CSV con columnas como <b>Título, Autor, Categoría, Estado</b>. Los datos se guardan localmente en este dispositivo.</p>
+<div class="button-row"><label class="secondary import-label" for="csvFile">＋ Importar CSV</label><input class="file-input" id="csvFile" type="file" accept=".csv,text/csv"></div>
+<div class="button-row" style="margin-top:8px"><button id="exportCsv" class="secondary">Exportar CSV</button><button id="clearLibrary" class="danger">Vaciar biblioteca</button></div>
+<p id="importMessage" class="small-note" aria-live="polite"></p>
+</section>
+<section class="panel">
+<h2>🌷 Consejitos</h2>
+<ul style="padding-left:19px;margin-bottom:0;line-height:1.6;color:var(--muted);font-size:.9rem">
+<li>Un libro elegido no vuelve a salir hasta que reinicies la ruleta.</li>
+<li>El estado de lectura se puede cambiar en cualquier momento.</li>
+<li>Exporta una copia CSV si quieres tener respaldo.</li>
+<li>Todo queda en este navegador; no hay cuenta ni sincronización.</li>
+</ul>
+</section>
+</div>
+<section class="panel">
+<h2>🕯️ Estantería</h2>
+<label for="search">Buscar por título o autor</label><input id="search" type="text" placeholder="Escribe un título o autor…" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fffafc;color:var(--ink);margin-bottom:12px">
+<div id="bookList" class="book-list"></div>
+</section>
+</main>
+<div class="foot">Hecha para tus ratitos de lectura · Tus libros son tuyos ♡</div>
+<script>
+const KEY='mi-ruleta-lectora-v1';
+const palette=['#f2c4d5','#e7d8f4','#f8d9bd','#cfe7dc','#f3e6a8','#e9c8e5','#d3dff4','#f6d4d6','#e6dfca','#c9e8ec'];
+let books=[], picked=new Set(), spinning=false, currentWinner=null, rotation=0;
+const $=id=>document.getElementById(id);
+const clean=s=>(s??'').toString().trim();
+function uid(){return 'b'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function normalStatus(s){let x=clean(s).toLowerCase();if(['leyendo','reading','in progress','en lectura','currently reading'].includes(x))return 'Leyendo';if(['leído','leida','read','completed','complete','finished','terminado','terminada','completado','completada'].includes(x))return 'Leído';if(['pausado','pausada','on hold','paused','abandoned'].includes(x))return 'Pausado';return 'Pendiente'}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({books,picked:[...picked]}))}catch(e){$('importMessage').textContent='No se pudo guardar: el almacenamiento del navegador puede estar lleno.'}}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d){books=Array.isArray(d.books)?d.books:[];picked=new Set(d.picked||[])}}catch(e){books=[];picked=new Set()}}
+function escapeHtml(s){return clean(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function eligible(){const cat=$('category').value, st=$('statusFilter').value;return books.filter(b=>(cat==='__all'||(Array.isArray(b.tags)&&b.tags.includes(cat))||b.category===cat)&&(st==='__all'||b.status===st)&&!picked.has(b.id))}
+function refreshCategories(){const sel=$('category'),old=sel.value;const cats=[...new Set(books.flatMap(b=>Array.isArray(b.tags)&&b.tags.length?b.tags:[b.category||'Sin categoría']).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));sel.innerHTML='<option value="__all">Todas las categorías</option>'+cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');if(cats.includes(old))sel.value=old}
+function drawWheel(list, angle=0){const c=$('wheel'),ctx=c.getContext('2d'),w=c.width,cx=w/2,cy=w/2,r=w*.46;ctx.clearRect(0,0,w,w);ctx.save();ctx.translate(cx,cy);ctx.rotate(angle);if(!list.length){ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fillStyle='#f7eaf1';ctx.fill();ctx.strokeStyle='#d9b5c8';ctx.lineWidth=8;ctx.stroke();ctx.fillStyle='#a87991';ctx.font='bold 28px Georgia';ctx.textAlign='center';ctx.fillText('Tu próxima',0,-8);ctx.fillText('lectura ♡',0,30);ctx.restore();return}
+const n=list.length,arc=Math.PI*2/n;
+for(let i=0;i<n;i++){const start=-Math.PI/2+i*arc,end=start+arc;ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,start,end);ctx.closePath();ctx.fillStyle=palette[i%palette.length];ctx.fill();ctx.strokeStyle='#fffaf7';ctx.lineWidth=5;ctx.stroke();
+if(n<=36){ctx.save();ctx.rotate(start+arc/2);ctx.textAlign='right';ctx.fillStyle='#5b4053';const fs=n>22?15:n>14?17:20;ctx.font=`${n>12?'600 ':''}${fs}px Georgia`;let title=list[i].title||'Sin título';const max=19;if(title.length>max)title=title.slice(0,max-1)+'…';ctx.fillText(title,r-22,5);ctx.restore()}}
+ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.strokeStyle='#fff';ctx.lineWidth=8;ctx.stroke();ctx.restore()}
+function render(){refreshCategories();const pool=eligible();$('eligibleCount').textContent=pool.length;$('pickedCount').textContent=picked.size;$('totalCount').textContent=books.length;$('spin').disabled=!pool.length||spinning;$('resetPicked').disabled=picked.size===0;$('wheelNote').textContent=!books.length?'Importa tu CSV para llenar la ruleta de historias.':pool.length?`${pool.length} libro(s) pueden salir con estos filtros.`:'No quedan libros disponibles con estos filtros. Prueba otra categoría o reinicia los elegidos.';if(!spinning)drawWheel(pool,rotation);renderBooks()}
+function renderBooks(){const q=$('search').value.trim().toLocaleLowerCase('es');const list=books.filter(b=>(`${b.title} ${b.author} ${b.category||''} ${(b.tags||[]).join(' ')}`.toLocaleLowerCase('es')).includes(q));$('bookList').innerHTML=list.length?list.map(b=>{const tags=(Array.isArray(b.tags)&&b.tags.length?b.tags:[b.category||'Sin categoría']).join(' · ');return `<article class="book"><div><div class="book-title-small">${escapeHtml(b.title||'Sin título')}</div><div class="book-meta">${escapeHtml(b.author||'Autor/a desconocido/a')}</div><div class="book-meta">${escapeHtml(tags)}</div>${picked.has(b.id)?'<span class="pill">Ya elegido</span>':''}</div><div class="book-actions"><select data-status="${b.id}" aria-label="Estado de ${escapeHtml(b.title)}">${['Pendiente','Leyendo','Leído','Pausado'].map(s=>`<option ${b.status===s?'selected':''}>${s}</option>`).join('')}</select><button class="danger" data-delete="${b.id}" aria-label="Eliminar ${escapeHtml(b.title)}" style="padding:8px 10px">×</button></div></article>`}).join(''):'<div class="empty">Tu estantería está esperando libros. Importa un CSV para empezar. ♡</div>'}
+function parseCSV(text){text=text.replace(/^\uFEFF/,'');const first=text.split(/\r?\n/,1)[0]||'';const candidates=[',',';','\t'];const delim=candidates.sort((a,b)=>first.split(b).length-first.split(a).length)[0];const rows=[];let row=[],field='',quoted=false;for(let i=0;i<text.length;i++){const ch=text[i];if(ch==='"'){if(quoted&&text[i+1]==='"'){field+='"';i++}else quoted=!quoted}else if(ch===delim&&!quoted){row.push(field);field=''}else if((ch==='\n'||ch==='\r')&&!quoted){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(field);if(row.some(v=>clean(v)))rows.push(row);row=[];field=''}else field+=ch}row.push(field);if(row.some(v=>clean(v)))rows.push(row);return rows}
+function importCSV(text){const rows=parseCSV(text);if(rows.length<2)throw Error('El CSV debe tener una fila de encabezados y al menos un libro.');const heads=rows[0].map(h=>clean(h).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''));const find=names=>heads.findIndex(h=>names.includes(h));let ti=find(['titulo','title','book','libro','name']);let ai=find(['autor','author','authors','autora','creators']);let ci=find(['categoria','category','genre','genero','genres','etiquetas','tags']);let si=find(['estado','status','reading status']);let isbni=find(['isbn','ean_isbn13','ean','isbn13','upc_isbn10','isbn10']);let descI=find(['description','descripcion','descripción']);let beganI=find(['began','started','fecha inicio']);let completedI=find(['completed','finished','fecha terminado']);if(ti<0)ti=0;
+let added=0,skipped=0;for(const r of rows.slice(1)){const title=clean(r[ti]);if(!title)continue;const author=ai>=0?clean(r[ai]):'';const rawTags=ci>=0?clean(r[ci]):'';const tags=[...new Set(rawTags.split(/[;,|]/).map(t=>clean(t)).filter(Boolean))];const category=tags[0]||'Sin categoría';let status=si>=0?normalStatus(r[si]):'Pendiente';if(si>=0&&!clean(r[si]))status=completedI>=0&&clean(r[completedI])?'Leído':beganI>=0&&clean(r[beganI])?'Leyendo':'Pendiente';const isbn=isbni>=0?clean(r[isbni]):'';const duplicate=books.some(b=>((isbn&&clean(b.isbn))?clean(b.isbn)===isbn:((clean(b.title).toLowerCase()===title.toLowerCase())&&clean(b.author).toLowerCase()===author.toLowerCase())));if(duplicate){skipped++;continue}books.push({id:uid(),title,author,category,tags:tags.length?tags:[category],status,isbn,description:descI>=0?clean(r[descI]):''});added++}save();render();$('importMessage').textContent=`¡Listo! Se importaron ${added} libro(s)${skipped?` y se omitieron ${skipped} posible(s) duplicado(s)`:''}. Las etiquetas de Libib ya están disponibles como filtros.`}
+$('csvFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{importCSV(await file.text())}catch(err){$('importMessage').textContent='No se pudo importar: '+err.message}e.target.value=''});
+$('category').addEventListener('change',()=>{ $('result').style.display='none';render()});$('statusFilter').addEventListener('change',()=>{ $('result').style.display='none';render()});$('search').addEventListener('input',renderBooks);
+$('bookList').addEventListener('change',e=>{const id=e.target.dataset.status;if(!id)return;const b=books.find(x=>x.id===id);if(b){b.status=e.target.value;save();render()}});
+$('bookList').addEventListener('click',e=>{const id=e.target.dataset.delete;if(!id)return;const b=books.find(x=>x.id===id);if(b&&confirm(`¿Eliminar "${b.title}" de tu biblioteca?`)){books=books.filter(x=>x.id!==id);picked.delete(id);save();render()}});
+function showWinner(b){currentWinner=b;$('resultTitle').textContent=b.title;$('resultAuthor').textContent=b.author||'Autor/a no indicado/a';$('resultCategory').textContent=(Array.isArray(b.tags)&&b.tags.length?b.tags:[b.category||'Sin categoría']).join(' · ');$('markReading').textContent='Empezar a leer';$('markReading').disabled=false;$('result').style.display='block';$('result').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function spin(){const pool=eligible();if(!pool.length||spinning)return;spinning=true;$('spin').disabled=true;$('result').style.display='none';const winner=pool[Math.floor(Math.random()*pool.length)];const all=pool.length,idx=pool.findIndex(b=>b.id===winner.id),arc=Math.PI*2/all;const target=-(idx+.5)*arc;const current=((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2);let delta=((target-current)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)+Math.PI*2*(5+Math.random()*3);const start=rotation,duration=3600,begin=performance.now();function frame(now){let t=Math.min(1,(now-begin)/duration);let ease=1-Math.pow(1-t,4);rotation=start+delta*ease;drawWheel(pool,rotation);if(t<1)requestAnimationFrame(frame);else{rotation=target;drawWheel(pool,rotation);picked.add(winner.id);save();spinning=false;render();showWinner(winner)}}requestAnimationFrame(frame)}
+$('spin').addEventListener('click',spin);$('another').addEventListener('click',()=>{ $('result').style.display='none';spin()});$('markReading').addEventListener('click',()=>{if(!currentWinner)return;const b=books.find(x=>x.id===currentWinner.id);if(b){b.status='Leyendo';save();render();$('statusFilter').value='__all';render();showWinner(b);$('markReading').textContent='♡ Marcado como leyendo';$('markReading').disabled=true}});
+$('resetPicked').addEventListener('click',()=>{if(!picked.size)return;if(confirm('¿Quieres que todos los libros elegidos vuelvan a estar disponibles en la ruleta?')){picked.clear();$('result').style.display='none';save();render()}});
+$('exportCsv').addEventListener('click',()=>{const quote=v=>'"'+clean(v).replace(/"/g,'""')+'"';const data=[['Título','Autor','Etiquetas','Estado','ISBN','Descripción'],...books.map(b=>[b.title,b.author,(b.tags||[b.category||'Sin categoría']).join(', '),b.status,b.isbn||'',b.description||''])].map(r=>r.map(quote).join(';')).join('\r\n');const blob=new Blob(['\uFEFF'+data],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mi-biblioteca-lectora.csv';a.click();URL.revokeObjectURL(a.href)});
+$('clearLibrary').addEventListener('click',()=>{if(confirm('Esto eliminará todos los libros guardados en este navegador. ¿Continuar?')){books=[];picked.clear();$('result').style.display='none';save();render();$('importMessage').textContent='Biblioteca vaciada.'}});
+load();render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>

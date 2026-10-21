@@ -1,0 +1,11 @@
+{
+  "name": "Mi Ruleta Lectora",
+  "short_name": "Ruleta Lectora",
+  "description": "Una ruleta personal para elegir tu próxima lectura.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff8f6",
+  "theme_color": "#f8eaf0",
+  "icons": []
+}
